@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SolutionTable extends JFrame {
     int WIDTH = 1000;
@@ -52,11 +54,11 @@ class SolutionPanel extends JPanel{
 
     public void paint(Graphics g) {
         for (int i = 0; i < capcity; i++) {
-            g.drawLine(i * unit, 0, i * unit, screen_height);
+            g.drawLine(i * unit, 0, i * unit, capcity*unit);
 
         }
         for (int i = 0; i < values.length; i++) {
-            g.drawLine(0, i * unit, screen_width, i * unit);
+            g.drawLine(0, i * unit, values.length*unit, i * unit);
         }
         knapsack(weights, values,capcity,g);
 
