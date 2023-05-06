@@ -36,7 +36,6 @@ public class MyPanel extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH_SCREEN, HEIGHT_SCREEN + 70));
     }
     void setupWeightsField() {
-
         weights.setFont(font);
         weights.setText("2,2,1,1");
         weights.setBounds(25, HEIGHT_SCREEN + 20, 150, 40);
@@ -68,7 +67,7 @@ public class MyPanel extends JPanel {
                 valueAr = getData(v);
                 weightAr = getData(w);
 
-                new SolutionTable(weightAr,valueAr,cap);
+                new SolutionTable(weightAr,valueAr,cap+1);
             }
         });
     }

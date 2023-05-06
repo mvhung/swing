@@ -9,7 +9,7 @@ public class SolutionTable extends JFrame {
     public SolutionTable(int[] weights, int[] values, int capacity) throws HeadlessException {
         solutionPanel = new SolutionPanel(weights,values,capacity);
         this.add(solutionPanel);
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setSize(WIDTH,HEIGHT);
         this.setVisible(true);
     }
@@ -41,7 +41,7 @@ class SolutionPanel extends JPanel{
     public void setColorCell(int i, int j, String value, Graphics g){
         g.setColor(Color.yellow);
         int squareX = i*unit;
-        int squareY = i*unit;
+        int squareY = j*unit;
         int squareSize = unit;
         g.fillRect(squareX, squareY, squareSize, squareSize);
         g.setColor(Color.gray);
@@ -60,30 +60,49 @@ class SolutionPanel extends JPanel{
         }
         knapsack(weights, values,capcity,g);
 
-//        setColorCell(2,2,"9",g);
+        //setColorCell(2,2,"9",g);
+        //painting(g);
     }
 
     public void knapsack(int[] ws, int[] vs, int cap,Graphics g){
         int n = ws.length;
         int [][] dp = initDp(ws,cap);
 
-        for(int i = 1; i <= n; i++) {
-            for (int j = 0; j <= cap; j++){
-                if (ws[i-1] <= j) {
-                    dp[i][j] = Math.max(dp[i-1][j],dp[i-1][j-ws[i]] + vs[i]);
-                    this.setColorCell(i,j,Integer.toString(dp[i][j]),g);
-                }
-                else{
-                    dp[i][j] = dp[i-1][j];
-                    this.setColorCell(i,j,Integer.toString(dp[i][j]),g);
-                }
+        // for(int i = 1; i < n; i++) {
+        //     for (int j = 0; j < cap; j++){
+        //         if (ws[i-1] <= j) {
+        //             dp[i][j] = Math.max(dp[i-1][j],vs[i-1] + dp[i-1][j - ws[i-1]]);
+        //             setColorCell(i,j,Integer.toString(dp[i][j]),g);
+        //         }
+        //         else{
+        //             dp[i][j] = dp[i-1][j];
+        //             setColorCell(i,j,Integer.toString(dp[i][j]),g);
+        //         }
+        //     }
+        // }
+        for (int i = 0; i < cap; i++) {
+            setColorCell(i,0,"0",g);
+        }
+        for (int i = 0; i <= vs.length; i++) {
+            setColorCell(0,i,"0",g);
+        }
+        int m = cap;
+        for (int i = 1; i <= n; ++i) {
+            for (int j  = 1; j < m; ++j) {
+              if (ws[i-1] <= j) {
+                dp[i][j] = Math.max(dp[i-1][j], vs[i-1] + dp[i-1][j - ws[i-1]]);
+                setColorCell(j,i,Integer.toString(dp[i][j]),g);
+              }else{
+                dp[i][j] = dp[i-1][j];
+                setColorCell(j,i,Integer.toString(dp[i][j]),g);
+              }
             }
         }
     }
 
     int [][] initDp(int[] weights, int capacity){
         int n = weights.length;
-        int[][] dp = new int[n][capacity + 1];
+        int[][] dp = new int[n+1][capacity + 1];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < capacity + 1; j++) {
                 dp[i][j] = 0;
@@ -93,4 +112,11 @@ class SolutionPanel extends JPanel{
     }
 
 
+    // void painting(Graphics g){
+    //     for (int i = 0; i < values.length; i++) {
+    //         for (int j = 0; j < values.length; j++) {
+    //             System.out.println(i+ " "+ j);
+    //         }
+    //     }
+    // }
 }
