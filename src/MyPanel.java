@@ -17,7 +17,10 @@ public class MyPanel extends JPanel {
     JTextField capacity = new JTextField();
 
     JButton runBtn = new JButton();
+    JRadioButton greedBtn = new JRadioButton("skhfdsiuduafiududohiadud");
+    JRadioButton dpBtn = new JRadioButton();
 
+    ButtonGroup buttonGroup =new ButtonGroup();
     int [] valueAr;
     int [] weightAr;
     int cap;
@@ -26,14 +29,34 @@ public class MyPanel extends JPanel {
         setupValuesField();
         setupCapacityField();
         setupRunBtn();
+        setupButtonGroup();
+        setupGreedBtn();
+        setupDpBtn();
 
         this.add(weights);
+        this.add(greedBtn);
+        this.add(dpBtn);
         this.add(values);
         this.add(capacity);
         this.add(runBtn);
 
         this.setLayout(null);
         this.setPreferredSize(new Dimension(WIDTH_SCREEN, HEIGHT_SCREEN + 70));
+    }
+    void setupButtonGroup(){
+        buttonGroup.add(this.greedBtn);
+        buttonGroup.add(this.dpBtn);
+    }
+    void setupGreedBtn(){
+        greedBtn.setFont(font);
+        greedBtn.setText("greedy");
+//        greedBtn.set
+        greedBtn.setBounds(WIDTH_SCREEN/2 -50, HEIGHT_SCREEN/2 , 20, 20);
+    }
+    void setupDpBtn(){
+        dpBtn.setFont(font);
+        dpBtn.setText("greedy");
+        dpBtn.setBounds(WIDTH_SCREEN/2 -30, HEIGHT_SCREEN/2 , 20, 20);
     }
     void setupWeightsField() {
         weights.setFont(font);

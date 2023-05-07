@@ -17,7 +17,7 @@ public class SolutionTable extends JFrame {
     }
 }
 
-class SolutionPanel extends JPanel{
+class SolutionPanel extends JPanel implements ActionListener{
 
     static int screen_width = 600;
     static int screen_height = 600;
@@ -25,11 +25,20 @@ class SolutionPanel extends JPanel{
     int[] weights;
     int[] values;
     int capcity;
+    int [][]dp;
+    Timer timer;
+    final int SPEED = 1000;
+
+    // Running state: -1: Not run yet, 0: running, 1: finish running
+    int run = -1;
     SolutionPanel(int[] weights, int[] values, int capacity) {
         this.weights = weights;
         this.values = values;
         this.capcity = capacity;
+        this.dp = initDp(this.weights, this.capcity);
         this.setPreferredSize(new Dimension(screen_height, screen_width));
+
+        getStart(SPEED);
         //this.setBackground(Color.black);
         this.setFocusable(true);
         this.setVisible(true);
@@ -66,42 +75,65 @@ class SolutionPanel extends JPanel{
         //painting(g);
     }
 
-    public void knapsack(int[] ws, int[] vs, int cap,Graphics g){
-        int n = ws.length;
-        int [][] dp = initDp(ws,cap);
+    int testNum = 0;
+    public void testPeform(){
+        for (int i = 0; i < 4; i++) {
+            this.testNum++;
+        }
 
-        // for(int i = 1; i < n; i++) {
-        //     for (int j = 0; j < cap; j++){
-        //         if (ws[i-1] <= j) {
-        //             dp[i][j] = Math.max(dp[i-1][j],vs[i-1] + dp[i-1][j - ws[i-1]]);
-        //             setColorCell(i,j,Integer.toString(dp[i][j]),g);
-        //         }
-        //         else{
-        //             dp[i][j] = dp[i-1][j];
-        //             setColorCell(i,j,Integer.toString(dp[i][j]),g);
-        //         }
-        //     }
-        // }
-        for (int i = 0; i < cap; i++) {
-            setColorCell(i,0,"0",g);
-        }
-        for (int i = 0; i <= vs.length; i++) {
-            setColorCell(0,i,"0",g);
-        }
-        int m = cap;
+    }
+//    public void knapsack(int[] ws, int[] vs, int cap,Graphics g){
+//        int n = ws.length;
+//        int [][] dp = initDp(ws,cap);
+//
+//
+//        for (int i = 0; i < cap; i++) {
+//            setColorCell(i,0,"0",g);
+//        }
+//        for (int i = 0; i <= vs.length; i++) {
+//            setColorCell(0,i,"0",g);
+//        }
+//        int m = cap;
+//        for (int i = 1; i <= n; ++i) {
+//            for (int j  = 1; j < m; ++j) {
+//              if (ws[i-1] <= j) {
+//                dp[i][j] = Math.max(dp[i-1][j], vs[i-1] + dp[i-1][j - ws[i-1]]);
+//                setColorCell(j,i,Integer.toString(dp[i][j]),g);
+//              }else{
+//                dp[i][j] = dp[i-1][j];
+//                setColorCell(j,i,Integer.toString(dp[i][j]),g);
+//              }
+//            }
+//        }
+//    }
+
+    public void knapsack(){
+        int n = this.weights.length;
+
+        int m = this.capcity;
         for (int i = 1; i <= n; ++i) {
             for (int j  = 1; j < m; ++j) {
-              if (ws[i-1] <= j) {
-                dp[i][j] = Math.max(dp[i-1][j], vs[i-1] + dp[i-1][j - ws[i-1]]);
-                setColorCell(j,i,Integer.toString(dp[i][j]),g);
-              }else{
-                dp[i][j] = dp[i-1][j];
-                setColorCell(j,i,Integer.toString(dp[i][j]),g);
-              }
+                if (weights[i-1] <= j) {
+                    dp[i][j] = Math.max(dp[i-1][j], this.values[i-1] + dp[i-1][j - weights[i-1]]);
+                }else{
+                    dp[i][j] = dp[i-1][j];
+                }
             }
         }
     }
 
+    public void knapsack1() {
+
+    }
+    public void sleep() {
+        long start = System.currentTimeMillis();
+
+        long elapsedTime = System.currentTimeMillis()- start;
+        while (elapsedTime < 1000){
+            elapsedTime = System.currentTimeMillis() - start;
+        }
+
+    }
     int [][] initDp(int[] weights, int capacity){
         int n = weights.length;
         int[][] dp = new int[n+1][capacity + 1];
@@ -111,6 +143,43 @@ class SolutionPanel extends JPanel{
             }
         }
         return dp;
+    }
+    public void getStart(int delay) {
+        timer = new Timer(delay, this);
+        timer.start();
+    }
+    public void stop() {
+        if (run == 1) {
+            timer.stop();
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (run == -1) {
+            // Activate clicking beginning point
+            this.run = 0;
+
+        } else{
+            if(this.testNum < 4) {
+                int n = this.weights.length;
+
+                int m = this.capcity;
+                for (int i = 1; i <= n; ++i) {
+                    for (int j  = 1; j < m; ++j) {
+                        if (weights[i-1] <= j) {
+                            dp[i][j] = Math.max(dp[i-1][j], this.values[i-1] + dp[i-1][j - weights[i-1]]);
+                        }else{
+                            dp[i][j] = dp[i-1][j];
+                        }
+                    }
+                }
+            }else {
+                stop();
+            }
+
+        }
+
+
     }
 
 
